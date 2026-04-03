@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day 3 | タスクプランニングシート</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F4F8FB;
+    --white: #FFFFFF;
+    --blue: #6AAED6;
+    --blue-mid: #88C0E0;
+    --blue-light: #B8D9EE;
+    --blue-pale: #DCF0F8;
+    --blue-soft: #F0F8FD;
+    --blue-border: rgba(106,174,214,0.3);
+    --blue-border2: rgba(106,174,214,0.15);
+    --blue-dark: #4A90B8;
+    --charcoal: #243040;
+    --dark: #1A2530;
+    --mid: #6A7D8E;
+    --light: #B8C8D4;
+    --border: #D4E4EE;
+    --section-bg: #FAFCFE;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--dark);
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  .page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 56px 44px 88px;
+  }
+
+  /* ══ HEADER ══ */
+  .header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--blue);
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.05s;
+  }
+
+  .day-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .title-jp {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 4px;
+    color: var(--charcoal);
+    line-height: 1.7;
+  }
+
+  .title-en {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-style: italic;
+    color: var(--mid);
+    letter-spacing: 2px;
+    margin-top: 8px;
+  }
+
+  .big-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 84px;
+    font-weight: 300;
+    color: var(--blue-pale);
+    line-height: 1;
+    letter-spacing: -3px;
+    text-align: right;
+  }
+
+  .big-num-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+    color: var(--blue);
+    text-transform: uppercase;
+    display: block;
+    text-align: right;
+    margin-top: -6px;
+  }
+
+  /* ══ INTRO ══ */
+  .intro {
+    margin-bottom: 44px;
+    padding: 22px 26px;
+    border-left: 2px solid var(--blue);
+    background: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.2s;
+  }
+
+  .intro p {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    line-height: 2.3;
+    color: var(--mid);
+    letter-spacing: 0.5px;
+  }
+
+  /* ══ SECTION CARD ══ */
+  .section-card {
+    margin-bottom: 32px;
+    background: var(--section-bg);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--blue);
+    padding: 28px 32px 32px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+  }
+
+  .section-card:nth-child(1) { animation-delay: 0.3s; }
+  .section-card:nth-child(2) { animation-delay: 0.4s; }
+  .section-card:nth-child(3) { animation-delay: 0.5s; }
+  .section-card:nth-child(4) { animation-delay: 0.6s; }
+  .section-card:nth-child(5) { animation-delay: 0.7s; }
+  .section-card:nth-child(6) { animation-delay: 0.8s; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+
+  .s-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--blue);
+    font-style: italic;
+  }
+
+  .s-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    color: var(--charcoal);
+  }
+
+  .s-hint {
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: 0.5px;
+    margin-bottom: 22px;
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  /* ══ WEEK GOAL ══ */
+  .week-goal-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--blue);
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+
+  .goal-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  input[type="text"], textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 2px 10px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--dark);
+    letter-spacing: 0.5px;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.9;
+  }
+
+  input[type="text"]:focus, textarea:focus { border-bottom-color: var(--blue); }
+  input[type="text"]::placeholder, textarea::placeholder {
+    color: var(--light);
+    font-style: italic;
+    font-size: 13px;
+  }
+
+  textarea { resize: none; }
+
+  /* ══ DAILY TASK BOARD ══ */
+  .day-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .day-tab {
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: var(--mid);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .day-tab:hover { border-color: var(--blue-border); color: var(--blue); }
+  .day-tab.active { background: var(--blue); border-color: var(--blue); color: white; }
+
+  .day-panel { display: none; }
+  .day-panel.active { display: block; }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .task-item {
+    display: grid;
+    grid-template-columns: 24px 1fr 90px 32px;
+    gap: 10px;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    transition: border-color 0.2s;
+  }
+
+  .task-item:focus-within { border-color: var(--blue-border); }
+
+  .task-check {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    cursor: pointer;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: transparent;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .task-check:hover { border-color: var(--blue-light); }
+  .task-check.done { background: var(--blue); border-color: var(--blue); color: white; }
+
+  .task-name {
+    font-size: 14px;
+    padding: 4px 0;
+  }
+
+  .task-name.done-text { text-decoration: line-through; color: var(--light); }
+
+  .priority-select {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 4px 6px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    color: var(--mid);
+    outline: none;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    width: 100%;
+  }
+
+  .del-btn {
+    background: transparent;
+    border: none;
+    color: var(--light);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 0;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+
+  .del-btn:hover { color: var(--blue); }
+
+  .add-task-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 8px 0;
+    background: transparent;
+    border: none;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    color: var(--blue);
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .add-task-btn:hover { opacity: 0.7; }
+
+  /* ══ PRIORITY MATRIX ══ */
+  .matrix-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .matrix-cell {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 16px;
+    min-height: 120px;
+  }
+
+  .matrix-cell-head {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .matrix-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-urgent { background: #E88A8A; }
+  .dot-schedule { background: var(--blue); }
+  .dot-delegate { background: #A8D4A8; }
+  .dot-eliminate { background: var(--light); }
+
+  .matrix-ta {
+    width: 100%;
+    background: transparent;
+    border: none;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    color: var(--dark);
+    outline: none;
+    resize: none;
+    min-height: 72px;
+    line-height: 2;
+    letter-spacing: 0.3px;
+  }
+
+  .matrix-ta::placeholder { color: var(--light); font-style: italic; font-size: 11px; }
+
+  .matrix-axis {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+    padding: 0 2px;
+  }
+
+  .axis-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--light);
+    text-transform: uppercase;
+  }
+
+  /* ══ TIME BLOCK ══ */
+  .time-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .time-row {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .time-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--blue);
+    letter-spacing: 1px;
+    text-align: right;
+    padding-right: 8px;
+    border-right: 1px solid var(--blue-pale);
+  }
+
+  .time-input {
+    font-size: 13px !important;
+    padding: 6px 2px 7px !important;
+  }
+
+  /* ══ REFLECTION ══ */
+  .reflection-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .ref-box {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 16px;
+  }
+
+  .ref-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* ══ PROGRESS BAR ══ */
+  .progress-wrap {
+    margin-top: 8px;
+    background: var(--blue-pale);
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue-light), var(--blue));
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    color: var(--mid);
+    letter-spacing: 1px;
+    margin-top: 6px;
+    text-align: right;
+  }
+
+  /* ══ COMMITMENT ══ */
+  .commitment-card {
+    margin-top: 44px;
+    background: var(--white);
+    border: 1px solid var(--blue-border);
+    border-top: 2px solid var(--blue);
+    padding: 36px 36px 32px;
+    position: relative;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards 0.9s;
+  }
+
+  .commitment-card::after {
+    content: '';
+    position: absolute;
+    top: 8px; left: 8px; right: -8px; bottom: -8px;
+    border: 1px solid var(--blue-pale);
+    pointer-events: none;
+  }
+
+  .commit-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 5px;
+    color: var(--blue);
+    text-transform: uppercase;
+    margin-bottom: 18px;
+  }
+
+  .commit-ta {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--blue-border);
+    padding: 8px 0 10px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    color: var(--charcoal);
+    letter-spacing: 0.5px;
+    line-height: 2.2;
+    outline: none;
+    resize: none;
+    min-height: 72px;
+  }
+
+  .commit-ta::placeholder { color: var(--light); font-style: italic; font-size: 13px; }
+
+  .commit-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 28px;
+    margin-top: 24px;
+  }
+
+  .sign-block { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; }
+
+  .sign-lbl {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--blue);
+    text-transform: uppercase;
+  }
+
+  .sign-line {
+    width: 160px;
+    border-bottom: 1px solid var(--blue-border);
+    height: 20px;
+  }
+
+  .sign-date {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    color: var(--mid);
+    letter-spacing: 2px;
+  }
+
+  /* ══ FOOTER ══ */
+  .footer {
+    margin-top: 52px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    opacity: 0;
+    animation: fadeUp 0.6s ease forwards 1.0s;
+  }
+
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    letter-spacing: 3px;
+    color: var(--blue);
+    font-style: italic;
+  }
+
+  .footer-page {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    color: var(--light);
+    letter-spacing: 3px;
+  }
+
+  .ornament {
+    text-align: center;
+    color: var(--blue-pale);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    letter-spacing: 10px;
+    margin: 36px 0 28px;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 620px) {
+    .page { padding: 36px 20px 64px; }
+    .big-num { font-size: 60px; }
+    .title-jp { font-size: 19px; }
+    .section-card { padding: 22px 18px 26px; }
+    .matrix-grid { grid-template-columns: 1fr; }
+    .reflection-grid { grid-template-columns: 1fr; }
+    .task-item { grid-template-columns: 24px 1fr 32px; }
+    .priority-select { display: none; }
+  }
+
+  @media print {
+    * { animation: none !important; opacity: 1 !important; }
+    body { background: white; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="day-label">Planning Sheet — Day Three</div>
+      <div class="title-jp">タスクプランニングシート</div>
+      <div class="title-en">Task Planning Sheet</div>
+    </div>
+    <div>
+      <div class="big-num">03</div>
+      <span class="big-num-sub">Day Three</span>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro">
+    <p>理想を描き、習慣を整えたら、最後は「今日・今週の行動」に落とし込む番です。<br>タスクを可視化し、優先順位をつけて、着実に前進しましょう。</p>
+  </div>
+
+  <!-- SECTION 01 : 今週のゴール -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="s-num">01.</span>
+      <span class="s-title">今週のゴール設定</span>
+    </div>
+    <p class="s-hint">今週終わったとき「これができたら最高！」と思えることを書きましょう。</p>
+
+    <div class="week-goal-box">
+      <div class="goal-label">Main Goal</div>
+      <input type="text" placeholder="例：SNS投稿を3本仕上げる、副業の初案件を獲得する">
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+      <div class="week-goal-box">
+        <div class="goal-label">仕事・キャリア</div>
+        <input type="text" placeholder="今週達成したいこと">
+      </div>
+      <div class="week-goal-box">
+        <div class="goal-label">プライベート・自己投資</div>
+        <input type="text" placeholder="今週達成したいこと">
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 02 : 優先度マトリクス -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="s-num">02.</span>
+      <span class="s-title">優先度マトリクス</span>
+    </div>
+    <p class="s-hint">タスクを4つの象限に分類して、本当にやるべきことを見極めましょう。</p>
+
+    <div style="margin-bottom:6px;">
+      <div class="matrix-axis">
+        <span class="axis-label">← 重要でない</span>
+        <span class="axis-label" style="color:var(--blue);">重要 →</span>
+      </div>
+    </div>
+
+    <div class="matrix-grid">
+      <div class="matrix-cell" style="border-top:2px solid #E88A8A;">
+        <div class="matrix-cell-head">
+          <div class="matrix-dot dot-urgent"></div>
+          緊急 × 重要
+        </div>
+        <textarea class="matrix-ta" placeholder="今すぐやる！&#10;例：明日の締め切り対応…"></textarea>
+      </div>
+      <div class="matrix-cell" style="border-top:2px solid var(--blue);">
+        <div class="matrix-cell-head">
+          <div class="matrix-dot dot-schedule"></div>
+          重要 × 余裕あり
+        </div>
+        <textarea class="matrix-ta" placeholder="計画して取り組む&#10;例：スキルアップ、戦略立案…"></textarea>
+      </div>
+      <div class="matrix-cell" style="border-top:2px solid #A8D4A8;">
+        <div class="matrix-cell-head">
+          <div class="matrix-dot dot-delegate"></div>
+          緊急 × 重要でない
+        </div>
+        <textarea class="matrix-ta" placeholder="誰かに任せる・後回し&#10;例：急ぎの返信、雑務…"></textarea>
+      </div>
+      <div class="matrix-cell" style="border-top:2px solid var(--light);">
+        <div class="matrix-cell-head">
+          <div class="matrix-dot dot-eliminate"></div>
+          どちらでもない
+        </div>
+        <textarea class="matrix-ta" placeholder="手放す・削除する&#10;例：惰性でやっていること…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 03 : デイリータスク -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="s-num">03.</span>
+      <span class="s-title">デイリータスクリスト</span>
+    </div>
+    <p class="s-hint">曜日タブを切り替えて、1日ごとのタスクを管理しましょう。</p>
+
+    <div class="day-tabs" id="dayTabs">
+      <button class="day-tab active" onclick="switchDay(0, this)">月</button>
+      <button class="day-tab" onclick="switchDay(1, this)">火</button>
+      <button class="day-tab" onclick="switchDay(2, this)">水</button>
+      <button class="day-tab" onclick="switchDay(3, this)">木</button>
+      <button class="day-tab" onclick="switchDay(4, this)">金</button>
+      <button class="day-tab" onclick="switchDay(5, this)">土</button>
+      <button class="day-tab" onclick="switchDay(6, this)">日</button>
+    </div>
+
+    <div id="dayPanels"></div>
+  </div>
+
+  <!-- SECTION 04 : タイムブロッキング -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="s-num">04.</span>
+      <span class="s-title">タイムブロッキング</span>
+    </div>
+    <p class="s-hint">1日の時間帯ごとに何をするかを決めておくと、迷いがなくなります。</p>
+
+    <div class="time-blocks">
+      <div class="time-row"><div class="time-label">05:00</div><input type="text" class="time-input" placeholder="朝活タイム"></div>
+      <div class="time-row"><div class="time-label">07:00</div><input type="text" class="time-input" placeholder="準備・移動"></div>
+      <div class="time-row"><div class="time-label">09:00</div><input type="text" class="time-input" placeholder="集中作業（午前）"></div>
+      <div class="time-row"><div class="time-label">12:00</div><input type="text" class="time-input" placeholder="ランチ・休憩"></div>
+      <div class="time-row"><div class="time-label">13:00</div><input type="text" class="time-input" placeholder="集中作業（午後）"></div>
+      <div class="time-row"><div class="time-label">17:00</div><input type="text" class="time-input" placeholder="副業・自己投資タイム"></div>
+      <div class="time-row"><div class="time-label">20:00</div><input type="text" class="time-input" placeholder="夜の振り返り・翌日準備"></div>
+      <div class="time-row"><div class="time-label">22:00</div><input type="text" class="time-input" placeholder="就寝準備"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 05 : 週次振り返り -->
+  <div class="section-card">
+    <div class="section-head">
+      <span class="s-num">05.</span>
+      <span class="s-title">週次振り返り</span>
+    </div>
+    <p class="s-hint">週末に5分だけ振り返ることで、翌週の質が格段に上がります。</p>
+
+    <div class="reflection-grid">
+      <div class="ref-box">
+        <div class="ref-label">✦ できたこと・よかったこと</div>
+        <textarea style="min-height:80px;" placeholder="小さなことでもOK。自分を褒めましょう🌸"></textarea>
+      </div>
+      <div class="ref-box">
+        <div class="ref-label">✦ 改善したいこと</div>
+        <textarea style="min-height:80px;" placeholder="次週に活かすための気づきを…"></textarea>
+      </div>
+      <div class="ref-box">
+        <div class="ref-label">✦ 来週の自分へ一言</div>
+        <textarea style="min-height:80px;" placeholder="未来の自分を励ます言葉を…"></textarea>
+      </div>
+      <div class="ref-box">
+        <div class="ref-label">✦ 今週のベストアクション</div>
+        <textarea style="min-height:80px;" placeholder="一番頑張ったことは何ですか？"></textarea>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div style="margin-top:20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-family:'Noto Serif JP',serif;font-size:13px;color:var(--charcoal);letter-spacing:1px;">今週の達成率</span>
+        <span style="font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--blue);letter-spacing:1px;" id="progressLabel">0%</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px;">
+        <input type="range" id="progressSlider" min="0" max="100" value="0"
+          style="flex:1;accent-color:var(--blue);cursor:pointer;"
+          oninput="document.getElementById('progressLabel').textContent=this.value+'%';document.getElementById('progressFill').style.width=this.value+'%'">
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ornament">— ✦ —</div>
+
+  <!-- COMMITMENT -->
+  <div class="commitment-card">
+    <div class="commit-label">My Commitment</div>
+    <textarea class="commit-ta" placeholder="3日間のプランニングを終えて、これからの自分へ誓う言葉を書いてください…"></textarea>
+    <div class="commit-bottom">
+      <div class="sign-block">
+        <span class="sign-lbl">Signature</span>
+        <div class="sign-line"></div>
+      </div>
+      <div class="sign-block">
+        <span class="sign-lbl">Date</span>
+        <div class="sign-date" id="todayDate"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-brand">@miyuu_psf</span>
+    <span class="footer-page">Day 03 / 03</span>
+  </div>
+
+</div>
+
+<script>
+  /* ── Date ── */
+  const d = new Date();
+  document.getElementById('todayDate').textContent =
+    `${d.getFullYear()} . ${String(d.getMonth()+1).padStart(2,'0')} . ${String(d.getDate()).padStart(2,'0')}`;
+
+  /* ── Day panels ── */
+  const dayNames = ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'];
+  const panelsEl = document.getElementById('dayPanels');
+  const taskData = Array.from({length: 7}, () => [
+    { name: '', priority: 'high', done: false },
+    { name: '', priority: 'mid', done: false },
+    { name: '', priority: 'low', done: false },
+  ]);
+
+  function renderPanels() {
+    panelsEl.innerHTML = '';
+    dayNames.forEach((day, di) => {
+      const panel = document.createElement('div');
+      panel.className = 'day-panel' + (di === 0 ? ' active' : '');
+      panel.id = `panel-${di}`;
+
+      const list = document.createElement('div');
+      list.className = 'task-list';
+
+      taskData[di].forEach((task, ti) => {
+        const item = document.createElement('div');
+        item.className = 'task-item';
+        item.innerHTML = `
+          <div class="task-check ${task.done ? 'done' : ''}" onclick="toggleTask(${di},${ti},this)">✓</div>
+          <input type="text" class="task-name ${task.done ? 'done-text' : ''}"
+            placeholder="タスクを入力…" value="${task.name}"
+            oninput="taskData[${di}][${ti}].name=this.value">
+          <select class="priority-select" onchange="taskData[${di}][${ti}].priority=this.value">
+            <option value="high" ${task.priority==='high'?'selected':''}>🔴 高</option>
+            <option value="mid" ${task.priority==='mid'?'selected':''}>🟡 中</option>
+            <option value="low" ${task.priority==='low'?'selected':''}>🟢 低</option>
+          </select>
+          <button class="del-btn" onclick="deleteTask(${di},${ti})">×</button>
+        `;
+        list.appendChild(item);
+      });
+
+      const addBtn = document.createElement('button');
+      addBtn.className = 'add-task-btn';
+      addBtn.innerHTML = '＋ タスクを追加';
+      addBtn.onclick = () => { taskData[di].push({name:'',priority:'mid',done:false}); renderPanels(); switchDay(di); };
+
+      panel.appendChild(list);
+      panel.appendChild(addBtn);
+      panelsEl.appendChild(panel);
+    });
+  }
+
+  function toggleTask(di, ti, el) {
+    taskData[di][ti].done = !taskData[di][ti].done;
+    el.classList.toggle('done', taskData[di][ti].done);
+    const input = el.nextElementSibling;
+    input.classList.toggle('done-text', taskData[di][ti].done);
+  }
+
+  function deleteTask(di, ti) {
+    if (taskData[di].length > 1) {
+      taskData[di].splice(ti, 1);
+      renderPanels();
+      switchDay(di);
+    }
+  }
+
+  function switchDay(idx, btn) {
+    document.querySelectorAll('.day-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.day-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`panel-${idx}`).classList.add('active');
+    if (btn) btn.classList.add('active');
+    else document.querySelectorAll('.day-tab')[idx].classList.add('active');
+  }
+
+  renderPanels();
+</script>
+</body>
+</html>
